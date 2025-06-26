@@ -42,4 +42,24 @@ class CalculatorServiceTests {
         BigDecimal result = calculator.subtract(new BigDecimal("1000000000"), new BigDecimal("1"));
         assertEquals(new BigDecimal("999999999"), result);
     }
+
+    /* Multiply method tests */
+
+    @Test
+    void multiply_TwoPositiveNumbers_ReturnsCorrectResult() {
+        BigDecimal result = calculator.multiply(new BigDecimal("3.2"), new BigDecimal("4.3"));
+        assertEquals(new BigDecimal("13.76"), result);
+    }
+
+    @Test
+    void multiply_NegativeNumbers_ReturnsCorrectResult() {
+        BigDecimal result = calculator.multiply(new BigDecimal("-3"), new BigDecimal("-4"));
+        assertEquals(new BigDecimal("12"), result);
+    }
+
+    @Test
+    void multiply_DecimalPrecision_ReturnsCorrectResult() {
+        BigDecimal result = calculator.multiply(new BigDecimal("0.1"), new BigDecimal("0.2"));
+        assertEquals(new BigDecimal("0.02"), result);
+    }
 }
