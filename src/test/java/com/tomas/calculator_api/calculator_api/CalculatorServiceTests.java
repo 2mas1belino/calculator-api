@@ -12,13 +12,13 @@ class CalculatorServiceTests {
     private final CalculatorService calculator = new CalculatorServiceImpl();
 
     @Test
-    void add_TwoPositiveNumbers_ReturnsCorrectSum() {
+    void add_TwoPositiveNumbers() {
         BigDecimal result = calculator.add(new BigDecimal("1.5"), new BigDecimal("2.3"));
         assertEquals(new BigDecimal("3.8"), result);
     }
 
     @Test
-    void add_NegativeNumbers_ReturnsCorrectSum() {
+    void add_NegativeNumbers() {
         BigDecimal result = calculator.add(new BigDecimal("-1"), new BigDecimal("-1"));
         assertEquals(new BigDecimal("-2"), result);
     }
@@ -26,19 +26,19 @@ class CalculatorServiceTests {
     /* Subtract method tests */
 
     @Test
-    void subtract_PositiveResult_ReturnsCorrectSum() {
+    void subtract_PositiveResult() {
         BigDecimal result = calculator.subtract(new BigDecimal("5.6"), new BigDecimal("3.3"));
         assertEquals(new BigDecimal("2.3"), result);
     }
 
     @Test
-    void subtract_NegativeResult_ReturnsCorrectSum() {
+    void subtract_NegativeResult() {
         BigDecimal result = calculator.subtract(new BigDecimal("-4"), new BigDecimal("2"));
         assertEquals(new BigDecimal("-6"), result);
     }
 
     @Test
-    void subtract_LargeNumberDifference_ReturnsCorrectSum() {
+    void subtract_LargeNumberDifference() {
         BigDecimal result = calculator.subtract(new BigDecimal("1000000000"), new BigDecimal("1"));
         assertEquals(new BigDecimal("999999999"), result);
     }
@@ -46,19 +46,19 @@ class CalculatorServiceTests {
     /* Multiply method tests */
 
     @Test
-    void multiply_TwoPositiveNumbers_ReturnsCorrectResult() {
+    void multiply_TwoPositiveNumbers() {
         BigDecimal result = calculator.multiply(new BigDecimal("3.2"), new BigDecimal("4.3"));
         assertEquals(new BigDecimal("13.76"), result);
     }
 
     @Test
-    void multiply_NegativeNumbers_ReturnsCorrectResult() {
+    void multiply_NegativeNumbers() {
         BigDecimal result = calculator.multiply(new BigDecimal("-3"), new BigDecimal("-4"));
         assertEquals(new BigDecimal("12"), result);
     }
 
     @Test
-    void multiply_DecimalPrecision_ReturnsCorrectResult() {
+    void multiply_DecimalPrecision() {
         BigDecimal result = calculator.multiply(new BigDecimal("0.1"), new BigDecimal("0.2"));
         assertEquals(new BigDecimal("0.02"), result);
     }
