@@ -13,5 +13,8 @@ public class CalculatorServiceImpl implements CalculatorService {
 
     @Override
     public BigDecimal subtract(BigDecimal a, BigDecimal b) {return a.subtract(b);}
+
+    @Override
+    public BigDecimal multiply(BigDecimal a, BigDecimal b) {return a.multiply(b);}
 }
 
