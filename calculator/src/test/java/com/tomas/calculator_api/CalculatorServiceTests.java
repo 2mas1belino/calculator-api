@@ -1,4 +1,4 @@
-package com.tomas.calculator_api.calculator_api;
+package com.tomas.calculator_api;
 
 import org.junit.jupiter.api.Test;
 
