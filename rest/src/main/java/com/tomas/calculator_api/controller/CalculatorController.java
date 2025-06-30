@@ -1,31 +1,39 @@
 package com.tomas.calculator_api.controller;
 
-import com.tomas.calculator_api.CalculatorService;
-import com.tomas.calculator_api.dtos.CalculationResponseDTO;
+import com.tomas.calculator_api.dtos.OperationRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/calculate")
 public class CalculatorController {
 
-    private final CalculatorService calculatorService;
+    private final KafkaTemplate<String, OperationRequest> kafkaTemplate;
 
-    public CalculatorController(CalculatorService calculatorService) {
-        this.calculatorService = calculatorService;
+    public CalculatorController(KafkaTemplate<String, OperationRequest> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @GetMapping("/add")
-    public ResponseEntity<CalculationResponseDTO> add(
+    public ResponseEntity<String> add(
             @RequestParam("a") BigDecimal a,
             @RequestParam("b") BigDecimal b) {
-        BigDecimal result = calculatorService.add(a, b);
-        return ResponseEntity.ok(new CalculationResponseDTO(result));
+
+        String operationId = UUID.randomUUID().toString();
+        OperationRequest request = new OperationRequest(operationId, "add", a, b);
+
+        kafkaTemplate.send("operation-requests", request);
+
+        return ResponseEntity.accepted()
+                .header("X-Operation-ID", operationId)
+                .body("Calculation enqueued. Use operation ID to fetch results.");
     }
 
-    @GetMapping("/subtract")
+    /*@GetMapping("/subtract")
     public ResponseEntity<CalculationResponseDTO> subtract(
             @RequestParam("a") BigDecimal a,
             @RequestParam("b") BigDecimal b) {
@@ -52,5 +60,5 @@ public class CalculatorController {
             return ResponseEntity.badRequest()
                     .body(new CalculationResponseDTO(null, e.getMessage()));
         }
-    }
+    }*/
 }
