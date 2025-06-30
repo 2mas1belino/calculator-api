@@ -18,6 +18,7 @@
 	<description>REST Calculator API for WIT Challenge</description>
 
 	<modules>
+		<module>api-common</module>
 		<module>api-dtos</module>
 		<module>calculator</module>
 		<module>rest</module>

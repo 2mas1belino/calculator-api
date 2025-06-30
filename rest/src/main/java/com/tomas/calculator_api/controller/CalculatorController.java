@@ -1,7 +1,8 @@
 package com.tomas.calculator_api.controller;
 
-
+import com.tomas.calculator_api.ResultStoreService;
 import com.tomas.calculator_api.dtos.OperationRequest;
+import com.tomas.calculator_api.dtos.OperationResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -14,18 +15,46 @@ import java.util.UUID;
 public class CalculatorController {
 
     private final KafkaTemplate<String, OperationRequest> kafkaTemplate;
+    private final ResultStoreService resultStoreService;
 
-    public CalculatorController(KafkaTemplate<String, OperationRequest> kafkaTemplate) {
+    public CalculatorController(
+            KafkaTemplate<String, OperationRequest> kafkaTemplate,
+            ResultStoreService resultStoreService) {
         this.kafkaTemplate = kafkaTemplate;
+        this.resultStoreService = resultStoreService;
     }
 
     @GetMapping("/sum")
     public ResponseEntity<String> add(
             @RequestParam("a") BigDecimal a,
             @RequestParam("b") BigDecimal b) {
+        return enqueueOperation(a, b, "add");
+    }
 
+    @GetMapping("/subtract")
+    public ResponseEntity<String> subtract(
+            @RequestParam("a") BigDecimal a,
+            @RequestParam("b") BigDecimal b) {
+        return enqueueOperation(a, b, "subtract");
+    }
+
+    @GetMapping("/multiply")
+    public ResponseEntity<String> multiply(
+            @RequestParam("a") BigDecimal a,
+            @RequestParam("b") BigDecimal b) {
+        return enqueueOperation(a, b, "multiply");
+    }
+
+    @GetMapping("/divide")
+    public ResponseEntity<String> divide(
+            @RequestParam("a") BigDecimal a,
+            @RequestParam("b") BigDecimal b) {
+        return enqueueOperation(a, b, "divide");
+    }
+
+    private ResponseEntity<String> enqueueOperation(BigDecimal a, BigDecimal b, String operation) {
         String operationId = UUID.randomUUID().toString();
-        OperationRequest request = new OperationRequest(operationId, "add", a, b);
+        OperationRequest request = new OperationRequest(operationId, operation, a, b);
 
         kafkaTemplate.send("operation-requests", request);
 
@@ -34,32 +63,11 @@ public class CalculatorController {
                 .body("Calculation enqueued. Use operation ID to fetch results.");
     }
 
-    /*@GetMapping("/subtract")
-    public ResponseEntity<CalculationResponseDTO> subtract(
-            @RequestParam("a") BigDecimal a,
-            @RequestParam("b") BigDecimal b) {
-        BigDecimal result = calculatorService.subtract(a, b);
-        return ResponseEntity.ok(new CalculationResponseDTO(result));
+    @GetMapping("/results/{operationId}")
+    public ResponseEntity<OperationResult> getResult(
+            @PathVariable String operationId) {
+        return resultStoreService.getResult(operationId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
-
-    @GetMapping("/multiply")
-    public ResponseEntity<CalculationResponseDTO> multiply(
-            @RequestParam("a") BigDecimal a,
-            @RequestParam("b") BigDecimal b) {
-        BigDecimal result = calculatorService.multiply(a, b);
-        return ResponseEntity.ok(new CalculationResponseDTO(result));
-    }
-
-    @GetMapping("/divide")
-    public ResponseEntity<CalculationResponseDTO> divide(
-            @RequestParam("a") BigDecimal a,
-            @RequestParam("b") BigDecimal b) {
-        try {
-            BigDecimal result = calculatorService.divide(a, b);
-            return ResponseEntity.ok(new CalculationResponseDTO(result));
-        } catch (ArithmeticException e) {
-            return ResponseEntity.badRequest()
-                    .body(new CalculationResponseDTO(null, e.getMessage()));
-        }
-    }*/
 }
