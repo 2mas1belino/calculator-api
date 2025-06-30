@@ -1,7 +1,7 @@
 package com.tomas.calculator_api.controller;
 
+
 import com.tomas.calculator_api.dtos.OperationRequest;
-import com.tomas.calculator_api.dtos.OperationResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;

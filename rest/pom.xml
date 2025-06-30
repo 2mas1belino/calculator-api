@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>com.tomas.calculator-api</groupId>
-            <artifactId>calculator</artifactId>
+            <artifactId>api-dtos</artifactId>
             <version>${project.version}</version>
         </dependency>
 

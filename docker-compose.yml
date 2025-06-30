@@ -24,6 +24,8 @@ services:
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
       KAFKA_KRAFT_CLUSTER_ID: "Lf6g9WXMT2mN7y2Zk-5hAQ"
       CLUSTER_ID: "Lf6g9WXMT2mN7y2Zk-5hAQ"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   rest-app:
     build:
