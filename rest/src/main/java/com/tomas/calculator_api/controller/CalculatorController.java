@@ -1,6 +1,7 @@
 package com.tomas.calculator_api.controller;
 
 import com.tomas.calculator_api.dtos.OperationRequest;
+import com.tomas.calculator_api.dtos.OperationResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class CalculatorController {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    @GetMapping("/add")
+    @GetMapping("/sum")
     public ResponseEntity<String> add(
             @RequestParam("a") BigDecimal a,
             @RequestParam("b") BigDecimal b) {
